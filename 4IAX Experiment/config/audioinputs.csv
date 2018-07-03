@@ -1,0 +1,5 @@
+label,text,row,col,dialog,tooltip,type
+Audio Instructions,"Use this tab only if you need to create dual pair audio files from single sound files. Otherwise, select the appropriate stimulus directory and CSV input file on the Session Information tab. Do not close this window while the files are being generated.",0,0,,Instructions,message
+Audio Directory,path,1,0,load_dir,Directory where sound files are located (file/path),entry
+Create,Create Stimuli,2,1,,Create stimulus files from all audio files in the given folder,button
+Files Created,Audio files will be listed here as they are created. The file path to the audio directory and input CSV file will be listed once file creation is complete.,3,0,,Audio files will be listed here as they are created. The file path to the audio directory and input CSV file will be listed once file creation is complete.,textbox
