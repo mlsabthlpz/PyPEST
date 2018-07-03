@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# My functions.
+# "My functions" taken from PsychoPy tutorial
+# See https://www.socsci.ru.nl/wilberth/psychopy/final.html
 
 import csv
 import os
