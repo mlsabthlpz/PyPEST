@@ -1,0 +1,6 @@
+label,text,row,col,dialog,tooltip,type
+Experiment Name,Experiment,0,0,,"Sets experiment name to be used in output and stimulus filenames, if applicable (text or number)",entry
+Participant ID,0,1,0,,Sets participant ID to be used in output filename (text or number),entry
+Stimulus Directory,path,2,0,load_dir,Directory where sound files are located (file/path),entry
+Input File,path,3,0,load,CSV file with experiment information (file/path.csv),entry
+Output Directory,path,4,0,save_dir,Directory where output file (results) will be stored (file/path),entry
