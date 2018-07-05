@@ -1,0 +1,5 @@
+**/*.wav
+**/*ppn*
+**/*.pyc
+**/*.xlsx
+**/lib/*pydub*/
