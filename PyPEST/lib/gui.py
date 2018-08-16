@@ -11,7 +11,7 @@ import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=RuntimeWarning)
     from pydub import AudioSegment
-
+import audiostim
 
 def main():
     
@@ -26,7 +26,6 @@ def main():
                 self.build_widgets(sessioninputs, sessionframe)
                 self.build_widgets(timinginputs, timingframe)
                 self.build_widgets(pestinputs, pestframe)
-                #self.build_widgets(audioinputs, audioframe)
             
             def iter_padding(frame, maxrange, padding):
                 '''Pad rows from 0 to maxrange for given frame.'''
@@ -65,10 +64,6 @@ def main():
             iter_padding(pestframe, 6, 5)
             pestframe.columnconfigure(0, pad=35)
             
-            #audioframe = ttk.Frame(self.notebook)
-            #audioframe.grid(row=0, column=0)
-            #iter_padding(audioframe, 9, 5)
-            #audioframe.columnconfigure(0, pad=35)
             
             buttonframe = ttk.Frame(master)
             buttonframe.grid(row=2, column=0, sticky='se')
@@ -77,8 +72,6 @@ def main():
             self.notebook.add(sessionframe, text="Session Information")
             self.notebook.add(timingframe, text="Timing Values")
             self.notebook.add(pestframe, text="PEST Presentation")
-            #self.notebook.add(audioframe, text="Audio Files")
-            #self.notebook.tab(2, state='disabled')
             
             # CSV files 
             timinginputs = self.config_info(os.path.join(dirpath, 
@@ -202,8 +195,16 @@ def main():
             for param in self.entries.keys():
                 try:
                     settings[param] = self.entries[param].get()
+                    settings['Input File'] = os.path.join(dirpath,
+                                                           'experiment',
+                                                           'csv_input',
+                                                           '{}_stimuli.csv'.format(settings['Experiment Name'])
+                                                           )
                 except AttributeError:
                     continue
+            audiostim.create_audio(settings['Experiment Name'], 
+                                   settings['Stimulus Directory'],
+                                   settings['Input File'])
             self.master.destroy()
         
         def config_info(self, filename):
@@ -232,51 +233,6 @@ def main():
                 info.append(row)
             config_file.close()
             return info
-        
-        def audio_change(self):
-            disable_list = [self.entries['Stimulus Directory'],
-                            self.entries['Input File'],
-                            self.buttons['Stimulus Directory'],
-                            self.buttons['Input File']]
-            for widget in disable_list:
-                if self.checked.get():
-                    widget.state(('!disabled',))
-                    self.notebook.tab(2, state='disabled')
-                else:
-                    widget.state(('disabled',))
-                    self.notebook.tab(2, state='normal')
-        
-        '''
-        def create_audio(self):
-            experiment = self.entries['Experiment Name'].get()
-            orig_audio_path = self.entries['Audio Directory'].get()
-            audio_list = os.listdir(orig_audio_path)
-            new_audio_path = os.path.join(dirpath, 'experiment', 'audio')
-            csv_name = '{}_stimuli.csv'.format(experiment)
-            csv_path = os.path.join(dirpath, 'experiment',
-                                    'csv_input', csv_name)
-            outfile = open(csv_path, 'w', newline='')
-            #short_silence = AudioSegment.silent(duration=250)
-            #long_silence = AudioSegment.silent(duration=500)
-            quadnum = 1
-            correct = 0
-            for aud in audio_list:
-                audA_path = os.path.join(audio_path, aud)
-                print(audA_path)
-                #soundA = AudioSegment.from_file(stim_path, format="wav")
-                AA = sound1 + short_silence + sound1
-                for sound in audio_list[audio_list.index(aud):]:
-                    audB_path = os.path.join(audio_path, sound)
-                    print(audB_path)
-                    #soundB = AudioSegment.from_file(, format="wav")
-                    BB = soundB + short_silence + soundB
-                    AB = soundA + short_silence + soundB
-                    BA = soundB + short_silence + soundA
-                    AAAB = AA + long_silence + AB
-                    ABAA = AB + long_silence + AA
-                    BABB = BA + long_silence + BB
-                    BBBA = BB + long_silence + BA
-        '''
 
     root = tk.Tk()
     settingsgui = SettingsMenu(root)
