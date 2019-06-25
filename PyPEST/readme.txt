@@ -1,5 +1,10 @@
 PyPEST log
 
+6-23-2019
+- Added information to output (date/time of experiment, filenames, etc.)
+- Reformatted headers
+- Added option to hide feedback
+
 3-24-2019
 - Adjusted response time to 7 seconds
 - Added visual cue for current sound
