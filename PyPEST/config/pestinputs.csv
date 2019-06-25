@@ -1,7 +1,7 @@
 label,text,row,col,dialog,tooltip,type
-First Comparison,99,0,0,,"This value selects the stimulus file that is used for the initial PEST trial. If it is greater than the number of available files, the program will use the last audio file.",entry
+First Comparison,81,0,0,,"This value selects the stimulus file that is used for the initial PEST trial. If it is greater than the number of available files, the program will use the last audio file.",entry
 Maximum Trials,128,1,0,,This value is the maximum number of trials that will be presented to the participant.,entry
 Maximum Stimulus,100,2,0,,This value is the maximum stimulus sound file that may be presented. By default this is the last sound file.,entry
 Minimum Stimulus,1,3,0,,"This value is the minimum stimulus sound file, i.e., the standard stimulus.",entry
-Maximum Step Size,99,4,0,,"This value is the maximum step size you want the program to use. By default, this is the number of sound files.",entry
-Minimum Step Size,0.5,5,0,,This value is the minimum step size you want the progra to use. This helps determine when PEST concludes its run and determines a threshold value.,entry
+Maximum Step Size,81,4,0,,"This value is the maximum step size you want the program to use. By default, this is the number of sound files.",entry
+Minimum Step Size,1,5,0,,This value is the minimum step size you want the program to use. This helps determine when PEST concludes its run and determines a threshold value.,entry

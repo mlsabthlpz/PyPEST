@@ -1,7 +1,7 @@
 label,text,row,col,dialog,tooltip,type
-Cue Interval,100,0,0,,Time for which the fixation cross is visible (milliseconds),entry
+Cue Interval,750,0,0,,Time for which the fixation cross is visible (milliseconds),entry
 Delay Interval,100,1,0,,Time from end of Cue Interval to presentation of stimuli (milliseconds),entry
-Response Interval,6000,2,0,,Time from beginning of stimulus presentation to response timeout (milliseconds),entry
-Anti-Startle Interval,500,3,0,,Time from response input to beginning of Feedback Interval (milliseconds),entry
-Feedback Interval,250,4,0,,Time for which feedback is visible (milliseconds),entry
-Inter-trial Interval,1000,5,0,,"Time from end of Feedback Interval to next Cue Interval (i.e., beginning of next trial) (milliseconds)",entry
+Response Interval,7000,2,0,,Time from beginning of stimulus presentation to response timeout (milliseconds),entry
+Anti-Startle Interval,250,3,0,,Time from response input to beginning of Feedback Interval (milliseconds),entry
+Feedback Interval,750,4,0,,Time for which feedback is visible (milliseconds),entry
+Inter-trial Interval,500,5,0,,"Time from end of Feedback Interval to next Cue Interval (i.e., beginning of next trial) (milliseconds)",entry

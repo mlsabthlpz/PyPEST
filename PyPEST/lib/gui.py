@@ -6,6 +6,7 @@ import os
 import sys
 import tkinter as tk
 from tkinter import filedialog, ttk
+from winsound import *
 import warnings
 
 with warnings.catch_warnings():
@@ -13,10 +14,15 @@ with warnings.catch_warnings():
     from pydub import AudioSegment
 import audiostim
 
+__author__ = 'Melissa Lopez'
+__version__ = '0.4.0'
+
 def main():
     
     dirpath = os.path.abspath('.')
     settings = {}
+    title = 'PEST v{} - Settings Menu'.format(__version__)
+    calibration_tone = "config\PESTtone.wav"
     
     class SettingsMenu:
         def __init__(self, master):
@@ -31,14 +37,21 @@ def main():
                 '''Pad rows from 0 to maxrange for given frame.'''
                 for i in range(maxrange):
                     frame.rowconfigure(i, pad=padding)
+                    
+            def play():
+                return PlaySound(calibration_tone, SND_FILENAME | SND_ASYNC)
+                
+            def stop_play():
+                return PlaySound(None, SND_PURGE)
             
             self.master = master
-            master.title("Settings Menu")
+            master.title(title)
             master.columnconfigure(0, pad=20)
             iter_padding(master, 3, 10)
             
             self.labels = {}
             self.entries = {}
+            self.checked = {}
             self.buttons = {}
             self.defaults = {}
             
@@ -57,14 +70,18 @@ def main():
             
             sessionframe = ttk.Frame(self.notebook)
             sessionframe.grid(row=0, column=0)
-            iter_padding(sessionframe, 5, 5)
+            iter_padding(sessionframe, 7, 5)
             
             pestframe = ttk.Frame(self.notebook)
             pestframe.grid(row=0, column=0)
             iter_padding(pestframe, 6, 5)
             pestframe.columnconfigure(0, pad=35)
             
-            
+            audioframe = ttk.Frame(self.notebook)
+            audioframe.grid(row=0, column=0)
+            iter_padding(audioframe, 5, 5)
+            audioframe.columnconfigure(0, weight=1)
+                        
             buttonframe = ttk.Frame(master)
             buttonframe.grid(row=2, column=0, sticky='se')
             buttonframe.rowconfigure(0, pad=10)
@@ -72,6 +89,7 @@ def main():
             self.notebook.add(sessionframe, text="Session Information")
             self.notebook.add(timingframe, text="Timing Values")
             self.notebook.add(pestframe, text="PEST Presentation")
+            self.notebook.add(audioframe, text="Calibrate Audio")
             
             # CSV files 
             timinginputs = self.config_info(os.path.join(dirpath, 
@@ -85,7 +103,17 @@ def main():
             
             set_defaults()
             
-            # Buttons for the bottom of the screen
+            # Audio calibration buttons
+            calibrate_instructions = ttk.Label(audioframe, 
+                                       text='Click the button to play the 15-second calibration tone.\n'
+                                       'Adjust the voltage to 17.8 mV to calibrate audio volume.').grid(
+                                        row=0, column=0)
+            self.calibrate = ttk.Button(audioframe, text='Play calibration sound',
+                              command=play).grid(row=2, column=0, sticky='ns')
+            self.stop_calibrate = ttk.Button(audioframe, text='Stop',
+                              command=stop_play).grid(row=3, column=0, sticky='ns')
+                           
+            # Buttons for the bottom of the screen               
             self.reset = ttk.Button(buttonframe, text='Reset defaults',
                            command=set_defaults).grid(row=0, column=0)
             self.submit = ttk.Button(buttonframe, text='Submit & Continue', 
@@ -130,15 +158,14 @@ def main():
                                                       column=int(d['col'])+2, 
                                                       sticky='w')
                 elif d['type'] == 'checkbox':
-                    self.checked = tk.IntVar()
-                    self.checked.set(1)
+                    self.checked[d['label']] = tk.IntVar()
+                    self.checked[d['label']].set(1)
                     self.entries[d['label']] = ttk.Checkbutton(frame,
-                                text=d['text'], variable=self.checked, 
-                                command=self.audio_change)
-                    #self.entries[d['label']].grid(
-                        #row=d['row'], column=d['col'], sticky='w')
-                    #Tooltip(self.entries[d['label']], 
-                            #text=d['tooltip'], wraplength=400)
+                                text=d['text'], variable=self.checked[d['label']])
+                    self.entries[d['label']].grid(
+                        row=d['row'], column=d['col'], sticky='w')
+                    Tooltip(self.entries[d['label']], 
+                            text=d['tooltip'], wraplength=400)
                 elif d['type'] == 'textbox':
                     self.entries[d['label']] = tk.Text(frame,
                                                         height=10,
@@ -200,11 +227,15 @@ def main():
                                                            'csv_input',
                                                            '{}_stimuli.csv'.format(settings['Experiment Name'])
                                                            )
+                    settings['Screen Width'] = root.winfo_screenwidth()
+                    settings['Screen Height'] = root.winfo_screenheight()
+                    settings['Calibration File Path'] = os.path.join(dirpath, calibration_tone)
                 except AttributeError:
-                    continue
+                    settings[param] = self.checked[param].get()
             audiostim.create_audio(settings['Experiment Name'], 
                                    settings['Stimulus Directory'],
-                                   settings['Input File'])
+                                   settings['Input File'],
+                                   int(settings['Minimum Stimulus']))
             self.master.destroy()
         
         def config_info(self, filename):

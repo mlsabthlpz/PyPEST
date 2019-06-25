@@ -1,5 +1,8 @@
 label,text,row,col,dialog,tooltip,type
 Experiment Name,Experiment,0,0,,"Sets experiment name to be used in output and stimulus filenames, if applicable (text or number)",entry
 Participant ID,0,1,0,,Sets participant ID to be used in output filename (text or number),entry
-Stimulus Directory,path,2,0,load_dir,Directory where sound files are located (file/path),entry
-Output Directory,path,3,0,save_dir,Directory where output file (results) will be stored (file/path),entry
+Computer ID,Computer,2,0,,Sets computer ID to be recorded,entry
+Stimulus Directory,path,3,0,load_dir,Directory where sound files are located (file/path),entry
+Output Directory,path,4,0,save_dir,Directory where output file (results) will be stored (file/path),entry
+Response Box,Responses will be entered using a response box (or mouse).,5,1,,Indicates the response input method (checked = response box or mouse; unchecked = keyboard),checkbox
+Feedback,Correctness feedback should be provided after each response.,6,1,,"Indicates whether correctness feedback should be provided following each response (checked = yes, unchecked = no). Feedback about participant's selection will always be provided. ",checkbox

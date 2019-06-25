@@ -10,7 +10,7 @@ from psychopy import core, visual, event
  
 ## Function section
 def getCharacter(window, question="Press any key to continue"):
-    message = visual.TextStim(window, text=question)
+    message = visual.TextStim(window, text=question, wrapWidth=20)
     message.draw()
     window.flip()
     c = event.waitKeys()

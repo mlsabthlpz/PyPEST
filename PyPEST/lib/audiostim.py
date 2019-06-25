@@ -8,17 +8,19 @@ with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=RuntimeWarning)
     from pydub import AudioSegment
 
-def create_audio(experiment, audio_path, stimfile_path):
+def create_audio(experiment, audio_path, stimfile_path, minstim):
     '''This function creates AAAB and ABAA files and stores them in a folder called 'tmp' within
         the original audio folder.
         experiment: This is the name for the current experiment as indicated by the user.
         audio_path: This is the path where the original audio files are stored.
         stimfile_path: This is where the stimulus csv file will be saved.
+        minstim: This is the standard stimulus to which all audio will be compared. By default,
+                 this would be the first audio file.
         '''
     audpath = audio_path
     csvpath = stimfile_path
-    os.chdir(audpath)
-    audio_list = [file for file in os.listdir(audpath) if file.endswith('.wav')]
+    #os.chdir(audpath)
+    audio_list = [os.path.join(audpath, file) for file in os.listdir(audpath) if file.endswith('.wav')][(minstim-1):]
     base = AudioSegment.from_file(audio_list[0], format="wav")
     short_silence = AudioSegment.silent(duration=250)
     long_silence = AudioSegment.silent(duration=500)
@@ -30,7 +32,7 @@ def create_audio(experiment, audio_path, stimfile_path):
     
     with open(csvpath, 'w', newline='') as input_csv:
         writer = csv.writer(input_csv, delimiter=',')
-        writer.writerow(['Filename', 'Level', 'CorrectResponse'])
+        writer.writerow(['Filename', 'Level', 'CorrectResponse', 'Original Base Filename', 'Original Comparison Filename'])
         for aud in audio_list:
             comparison = AudioSegment.from_file(aud, format="wav")
             AB = base + short_silence + comparison
@@ -43,5 +45,5 @@ def create_audio(experiment, audio_path, stimfile_path):
                                     '{}_level{}_{}'.format(experiment, level_num, 'ABAA.wav'))
             AAAB.export(AAAB_path, format='wav')
             ABAA.export(ABAA_path, format='wav')
-            writer.writerow([os.path.basename(AAAB_path), level_num, 2])
-            writer.writerow([os.path.basename(ABAA_path), level_num, 1])
+            writer.writerow([os.path.basename(AAAB_path), level_num, 2, audio_list[0], aud])
+            writer.writerow([os.path.basename(ABAA_path), level_num, 1, audio_list[0], aud])

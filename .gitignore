@@ -3,3 +3,4 @@
 **/*.pyc
 **/*.xlsx
 **/lib/*pydub*/
+PyPEST/img/*
